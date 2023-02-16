@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+	<div id="layoutSidenav" th:fragment="sidenav">
+		<div id="layoutSidenav_nav">
+			<nav class="sb-sidenav accordion sb-sidenav-dark"
+				style="background-color: #1B396A;" id="sidenavAccordion">
+			<div class="sb-sidenav-menu">
+				<div class="nav">
+					<div class="sb-sidenav-menu-heading">Sistema Integral</div>
+					<th:block
+						th:each="choose : ${T(mx.edu.itspa.esgi.scse.config.Menu).ACADEMIC}"
+						th:if="${#lists.contains(session.user.getNameRoles(),choose.key)}">
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+							th:attr="data-bs-target='#'+${#strings.replace(choose.key,' ','')}"
+							aria-expanded="false" aria-controls="${choose.key}">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-columns"></i>
+							</div>
+							<div th:text="${choose.key}"></div>
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse"
+							th:id="${#strings.replace(choose.key,' ','')}"
+							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							<th:block th:each="menu : ${choose.value}">
+								<nav class="sb-sidenav-menu-nested nav"> <a
+									class="nav-link" th:href="${menu.value}" th:text="${menu.key}"></a>
+								</nav>
+							</th:block>
+						</div>
+					</th:block>
+				</div>
+			</div>
+			<div class="sb-sidenav-footer" style="background-color: #103870;">
+				<div class="small">
+					<p th:text="#{login.loggedInAs}">Logged in as:</p>
+				</div>
+				<ul>
+					<li th:each="role : ${session.user.roles}" th:text="${role.name}"
+						style="font-size: 10px"></li>
+				</ul>
+				<!--  <p th:text="${session.user.department.name}" th:unless="@{department==null}">Desconocido</p>-->
+			</div>
+			</nav>
+		</div>
+	</div>
+</body>
+</html>

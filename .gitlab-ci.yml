@@ -1,0 +1,34 @@
+image: docker:20.10.16
+
+variables:
+  #DOCKER_HOST: tcp://docker:2375
+  #DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest  
+  #MAVEN_CLI_OPTS: "-s settings.xml --batch-mode --errors --fail-at-end --show-version"  
+  #MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=.m2" #-Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=3128"
+  #NO_PROXY: "docker"
+
+services:
+- name: docker:20.10.16-dind
+
+before_script:
+  - docker info
+  - pwd
+  - ls
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+    - .m2/repository
+
+stages:
+- build
+
+build:
+  stage: build
+  script:
+    - DOCKER_BUILDKIT=1 docker build -t $CONTAINER_TEST_IMAGE .
+    - docker push $CONTAINER_TEST_IMAGE

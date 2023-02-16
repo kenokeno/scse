@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="fragments/fragments :: html_head "></div>
+<style>
+.td-text-bold{
+	font-weight:bold;
+}
+</style>
+</head>
+<body class="sb-nav-fixed">
+	<div th:replace="fragments/fragments :: header"></div>
+	<div id="layoutSidenav">
+		<div th:replace="fragments/fragments :: sidenav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">Solicitud</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item active">Detalle</li>
+					</ol>
+					<form action="#" th:action="@{/department/request/save}"
+						method="post" th:object="${request}" style="padding-right:20px">
+						<input type="hidden" th:field="*{id}" id="id" />
+						<table style="width: 100%;">
+							<tr>
+								<td class="td-text-bold"><p>Cliente:</p></td>
+								<td>
+									<p th:text="${request.user.clave}"></p>
+								</td>
+							</tr>
+							<tr>
+								<td class="td-text-bold"><p>Servicio:</p></td>
+								<td>
+									<p th:text="${request.service.name}"></p>
+								</td>
+							</tr>
+							<tr>
+								<td class="td-text-bold"><p>Estado:</p></td>
+								<td><select th:field="*{status}" class="form-select form-select-sm" aria-label=".form-select-sm example">
+										<option th:each="status : *{service.status}"
+											th:value="${status.id}" th:utext="${status.name}"></option>
+								</select></td>
+							</tr>
+							<tr>
+								<td class="td-text-bold"><p>Creado:</p></td>
+								<td>
+									<p th:text="${request.created}"></p>
+								</td>
+							</tr>
+							<tr>
+								<td class="td-text-bold"><p>Actualizado:</p></td>
+								<td>
+									<p th:text="${request.updated}"></p>
+								</td>
+							</tr>
+							<tr>
+								<td class="td-text-bold"><p>Documentos:</p></td>
+								<td>
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th>Documento Requerido</th>
+												<th style="text-align: center;">Documento Entregado</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="document_service : *{service.documents}">
+												<td><div th:text="${document_service.name}"></div></td>
+												<td style="text-align: center;">
+													<div
+														th:if="${request.requestdocuments!=null and !request.requestdocuments.isEmpty()}">
+														<th:block
+															th:each="requestdocuments : ${request.requestdocuments}">
+															<div
+																th:if="${requestdocuments.documentId == document_service.id}">
+																<a th:href="'files/' + ${requestdocuments.path}">&#128196;</a>
+															</div>
+														</th:block>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" align= "right">								
+										<button type="submit" class="btn btn-outline-primary mb-3"
+											th:text="#{request.detail.save}">Save Changes</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div class="row" style="padding-top: 20px; padding-bottom: 20px">
+						<div class="row">
+							<h3>Enviar comentario</h3>
+						</div>
+						<div class="row align-items-center">
+							<form action="#" th:action="@{/department/request/comment/save}"
+								method="post" th:object="${commentForm}">
+								<input type="hidden" th:field="*{requestId}"
+									id="commentForm.requestId" />
+								<div class="form-floating mb-3">
+									<input type="text" th:field="*{comment}" class="form-control"
+										id="comment" placeholder="Escribe tu comentario..." /> <label for="comment">Comentario</label>
+								</div>
+								<ul>
+									<li th:each="err : ${#fields.errors('comment')}"
+										th:text="${err}" class="error" />
+								</ul>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button type="submit" class="btn btn-outline-primary mb-3"
+										th:text="Comentar">Comment</button>
+								</div>
+							</form>
+						</div>
+						<div class="row">
+							<table>
+								<tr>
+									<td>
+										<div class="card w-100">
+											<div class="card-header">Comentarios realizados durante el trámite</div>
+											<div class="card-body">
+												<blockquote class="blockquote mb-0">
+													<th:block th:each="comment : ${request.comments}">
+														<p th:text="${comment.comment}"></p>
+														<footer class="blockquote-footer fs-6"
+															th:text="${'&#9993; Usuario: ' + comment.user.clave + ' | Creado: ' + comment.updated}">
+														</footer>
+													</th:block>
+												</blockquote>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</main>
+			<div th:replace="fragments/fragments :: footer"></div>
+		</div>
+	</div>
+</body>
+</html>

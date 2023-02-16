@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<style>
+table td {
+	vertical-align: top;
+	border: solid 1px #888;
+	padding: 10px;
+}
+</style>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="sb-nav-fixed">
+	<main>
+		<div class="container-fluid px-4">
+			<h1 class="mt-4 text-center">Ocurrió Un Error En El Sistema</h1>
+			<table class="table table-striped">
+				<tr>
+					<td>Fecha</td>
+					<td th:text="${timestamp}" />
+				</tr>
+				<tr>
+					<td>Dirección</td>
+					<td th:text="${path}" />
+				</tr>
+				<tr>
+					<td>Error</td>
+					<td th:text="${error}" />
+				</tr>
+				<tr>
+					<td>Estado</td>
+					<td th:text="${status}" />
+				</tr>
+				<tr>
+					<td>Mensaje</td>
+					<td th:text="${message}" />
+				</tr>
+				<tr>
+					<td>Excepción</td>
+					<td th:text="${exception}" />
+				</tr>
+				<tr>
+					<td>Trazo</td>
+					<td><pre th:text="${trace}" /></td>
+				</tr>
+			</table>
+		</div>
+	</main>
+</body>
+</html>

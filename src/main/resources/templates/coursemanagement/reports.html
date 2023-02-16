@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="fragments/fragments :: html_head "></div>
+</head>
+<body class="sb-nav-fixed">
+	<div th:replace="fragments/fragments :: header"></div>
+	<div id="layoutSidenav">
+		<div th:replace="fragments/fragments :: sidenav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">Gestión del Curso</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item active">Reportes</li>
+					</ol>
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i> Opciones
+						</div>
+						<div class="card-body">
+							<form action="reports"  method="post"
+								th:object="${courseManagementReport}"
+								target="_blank">
+								<p>Reporte:</p>
+								<select th:field="${courseManagementReport.report}"
+									class="form-select form-select-sm"
+									aria-label=".form-select-sm example">
+									<option th:each="report : ${reports}" th:value="${report.path}"
+										th:utext="${report.name}"></option>
+								</select>
+								<br/>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button type="submit" class="btn btn-outline-primary mb-3"
+										th:text="Generar">Generar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</main>
+			<div th:replace="fragments/fragments :: footer"></div>
+		</div>
+	</div>
+</body>
+</html>
