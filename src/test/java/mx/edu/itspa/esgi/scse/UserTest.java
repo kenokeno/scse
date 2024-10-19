@@ -8,6 +8,6 @@ public class UserTest {
 	@Test
 	public void generarPassword() {
 		BCryptPasswordEncoder passGen=new BCryptPasswordEncoder();
-		System.out.println(passGen.encode("coordtut2022"));
+		System.out.println(passGen.encode("ingles-23"));
 	}
 }
